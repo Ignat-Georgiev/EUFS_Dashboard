@@ -28,9 +28,10 @@ class Adafruit_TLC5947 {
   boolean begin(void);
 
   void setPWM(uint16_t chan, uint16_t pwm);
-  void setLED(uint16_t lednum, uint16_t state);
-  void setLEDRGB(uint16_t lednum, uint16_t r, uint16_t g, uint16_t b);
+  void set(uint16_t lednum, uint16_t state);
+  void setLED(uint16_t lednum, uint16_t r, uint16_t g, uint16_t b);
   void write(void);
+  void clear(void);
 
 
  private:

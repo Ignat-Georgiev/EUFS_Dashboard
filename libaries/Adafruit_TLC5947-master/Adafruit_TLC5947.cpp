@@ -59,7 +59,13 @@ void Adafruit_TLC5947::setPWM(uint16_t chan, uint16_t pwm) {
   pwmbuffer[chan] = pwm;  
 }
 
-void Adafruit_TLC5947::setLED(uint16_t lednum, uint16_t state){
+void Adafruit_TLC5947::clear() {
+	for (int i = 0; i < 24; i++) {
+		pwmbuffer[i] = 0;
+	}
+}
+
+void Adafruit_TLC5947::set(uint16_t lednum, uint16_t state){
 	if(state == 1 )
 		setPWM(lednum, 4095);
 	else
@@ -67,7 +73,7 @@ void Adafruit_TLC5947::setLED(uint16_t lednum, uint16_t state){
 }
 
 
-void Adafruit_TLC5947::setLEDRGB(uint16_t lednum, uint16_t r, uint16_t g, uint16_t b) {
+void Adafruit_TLC5947::setLED(uint16_t lednum, uint16_t r, uint16_t g, uint16_t b) {
   setPWM(lednum*3, r);
   setPWM(lednum*3+1, g);
   setPWM(lednum*3+2, b);
