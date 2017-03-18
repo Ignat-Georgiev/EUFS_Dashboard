@@ -51,4 +51,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #undef PSTR
 #define PSTR(string_literal) ((const PROGMEM char *)(string_literal))")
 #include <EUFS_Dashboard.ino>
+#include <RPM_Meter.cpp>
+#include <RPM_Meter.h>
+#include <sevenSeg.cpp>
+#include <sevenSeg.h>
 #endif

@@ -1,13 +1,13 @@
+#include "sevenSeg.h"
+#include "RPM_Meter.h"
 #include <Event.h>
 #include <Timer.h>
 #include <ToggleButton.h>
 #include <Adafruit_TLC5947.h>
-#include "RPM_Meter.h"
-//#include "7seg.h"
+
 
 Timer testButtonTimer;
 int shiftLED = 5;
-//int rpm[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 ToggleButton testBtn(12, HIGH);
 bool rst = false;
 int osci = false;
@@ -20,15 +20,7 @@ int osci = false;
 Adafruit_TLC5947 drvr = Adafruit_TLC5947(NUM_TLC, drvr_clock, drvr_data, drvr_lat);
 
 //	RPM CINSTRUCTUCTOR
-
 RPM_Meter rpm(&drvr, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-
-
-// FUNC HEADERS
-//void RPMtest();
-//void setRPM(uint16_t n);
-//void clearLED();
-//void setGear(uint16_t gear, boolean dot = false);
 
 
 
@@ -83,54 +75,3 @@ void warningTest() {
     osci = true;
   }
 }
-
-
-
-//void RPMtest() {
-//	for (int i = 0; i <= 10; i++) {
-//		setRPM(i);
-//		delay(100);
-//	}
-//}
-//
-//void setRPM(uint16_t n) {
-//	for (int i = 0; i < 10; i++){
-//		if (i < n)
-//			drvr.set(rpm[i], 1);
-//		else
-//			drvr.set(rpm[i], 0);
-//	}
-//	drvr.write();
-//}
-//
-//void clearLED() {
-//	for (int i = 0; i < 24; i++) {
-//		drvr.set(i, 0);
-//	}
-//	drvr.write();
-//}
-//
-//void setGear(uint16_t gear, boolean dot) {
-//	switch (gear) {
-//	case 0:
-//		break;
-//	case 1:
-//		break;
-//	case 2:
-//		break;
-//	case 3:
-//		break;
-//	case 4:
-//		break;
-//	case 5:
-//		break;
-//	case 6:
-//		break;
-//	case 7:
-//		break;
-//	case 8:
-//		break;
-//	case 9:
-//		break;
-//	}
-//}

@@ -1,14 +1,23 @@
-#include <Arduino.h>
-#include <Adafruit_TLC5947.h>
+// sevenSeg.h
 
-class sevenSeg{
+#ifndef _SEVENSEG_h
+#define _SEVENSEG_h
+
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include <Arduino.h>
+	#include <Adafruit_TLC5947.h>
+#else
+	#include "WProgram.h"
+#endif
+
+class sevenSeg {
 public:
 	sevenSeg(Adafruit_TLC5947 *tlcIN, uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e,
-		uint16_t f, uint16_t g, uint16_t dp) {
+		uint16_t f, uint16_t g, uint16_t dp);
 
 		void set(uint16_t dig);
-		void test();
-		void init();
+		uint16_t test();
+		uint16_t init();
 
 private:
 	Adafruit_TLC5947 *tlc;
@@ -22,4 +31,8 @@ private:
 	uint16_t F;
 	uint16_t G;
 	uint16_t DP;
-}
+	};
+
+
+#endif
+
