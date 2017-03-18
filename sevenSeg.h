@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include <Adafruit_TLC5947.h>
 
-class 7seg{
+class sevenSeg{
 public:
-	7seg(Adafruit_TLC5947 *tlcIN, uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e,
+	sevenSeg(Adafruit_TLC5947 *tlcIN, uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e,
 		uint16_t f, uint16_t g, uint16_t dp) {
 
 		void set(uint16_t dig);
