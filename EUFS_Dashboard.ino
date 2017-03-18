@@ -1,3 +1,4 @@
+#include <Button.h>
 #include "sevenSeg.h"
 #include "RPM_Meter.h"
 #include <Event.h>
@@ -6,11 +7,14 @@
 #include <Adafruit_TLC5947.h>
 
 
-Timer testButtonTimer;
+// pin assignments
+uint16_t engineTempLED = 10;
+uint16_t oilLED = 11;
 int shiftLED = 5;
-ToggleButton testBtn(12, HIGH);
 bool rst = false;
 int osci = false;
+int brightness = 0;
+int brightnessLevels[4] = { 4095 / 4, 4095 / 2, 4095 / 1.25, 4095 };
 
 // LED Driver constructor
 #define NUM_TLC 1
@@ -19,23 +23,31 @@ int osci = false;
 #define drvr_lat 3
 Adafruit_TLC5947 drvr = Adafruit_TLC5947(NUM_TLC, drvr_clock, drvr_data, drvr_lat);
 
-//	RPM CINSTRUCTUCTOR
+//	CINSTRUCTUCTORS
 RPM_Meter rpm(&drvr, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-
+sevenSeg dsp(&drvr, 13, 12, 17, 18, 19, 14, 15, 16);
+ToggleButton testBtn(12, HIGH);
+Timer testButtonTimer;
+Button pwmChanger(11, false, false, 50);
 
 
 void setup()
 {
 
   Serial.begin(19200);
+  pinMode(shiftLED, OUTPUT);
+
   drvr.begin();
   drvr.clear();
-  pinMode(shiftLED, OUTPUT);
+
+  for (int i = 0; i < 10; i++) {
+	  rpm.test();
+	  dsp.init();
+  }
 
   // TEST ARRANGEMENTS
   testButtonTimer.oscillate(shiftLED, 500, 1);
-  testButtonTimer.every(100, RPMtest);
-  testButtonTimer.every(200, warningTest);
+  testButtonTimer.every(100, test);
 
 }
 
@@ -54,24 +66,37 @@ void loop()
       drvr.clear();
       rst = false;
     }
+
+	// PWM CHANGER
+	pwmChanger.read();
+	if (pwmChanger.wasReleased()) {
+		drvr.setPWM(brightnessLevels[brightness]);
+		if (++brightness == 4)
+			brightness = 0;
+	}
   }
+
+
 
 }
 
 // Nescessery dummy call
-void RPMtest() {
+void test() {
   rpm.test();
+  dsp.test();
+  warningTest();
 }
 
+// Warning LED test
 void warningTest() {
   if (osci) {
-    drvr.set(10, 1);
-    drvr.set(11, 0);
+    drvr.set(engineTempLED, 1);
+    drvr.set(oilLED, 0);
     osci = false;
   }
   else {
-    drvr.set(10, 0);
-    drvr.set(11, 1);
+    drvr.set(oilLED, 0);
+    drvr.set(engineTempLED, 1);
     osci = true;
   }
 }
