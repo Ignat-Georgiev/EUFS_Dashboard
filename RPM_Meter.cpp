@@ -1,10 +1,10 @@
-#include <RPM_Meter.h>
+#include "RPM_Meter.h"
 #include <Adafruit_TLC5947.h>
 #include <Timer.h>
 
-Adafruit_TLC5947 tlc;
+//Adafruit_TLC5947 tlc(1,9,8,3);
 
-RPM_Meter::RPM_Meter(uint16_t led1, uint16_t led2, uint16_t led3, uint16_t led4, uint16_t led5, uint16_t led6, uint16_t led7
+RPM_Meter::RPM_Meter(Adafruit_TLC5947 *tlcIN, uint16_t led1, uint16_t led2, uint16_t led3, uint16_t led4, uint16_t led5, uint16_t led6, uint16_t led7
 	, uint16_t led8, uint16_t led9, uint16_t led10) {
 	leds = (uint16_t *)malloc(480);
 	memset(leds, 0, 480);
@@ -18,23 +18,31 @@ RPM_Meter::RPM_Meter(uint16_t led1, uint16_t led2, uint16_t led3, uint16_t led4,
 	leds[7] = led8;
 	leds[8] = led9;
 	leds[9] = led10;
-
+	tlc = tlcIN;
+	prevState = 0;
 }
 
 void RPM_Meter::set(uint16_t rpm) {
 	for (int i = 0; i < 10; i++) {
 		if (i < rpm)
-			tlc.set(led[i], 1);
+			tlc->set(leds[i], 1);
 		else
-			tlc.set(led[i], 0);
+			tlc->set(leds[i], 0);
 	}
-	tlc.write();
+	tlc->write();
 }
 
 void RPM_Meter::test() {
-	for (i = 0, i <= 10; i++) {
-		set(i);
+
+	if (prevState == 10) {
+		set(0);
+		prevState = 0;
 	}
+	else {
+		prevState++;
+		set(prevState);
+	}
+
 }
 
 void RPM_Meter::warning() {

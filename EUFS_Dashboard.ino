@@ -1,7 +1,8 @@
+#include <Event.h>
 #include <Timer.h>
 #include <ToggleButton.h>
 #include <Adafruit_TLC5947.h>
-#include <RPM_Meter.h>
+#include "RPM_Meter.h"
 
 Timer testButtonTimer;
 int shiftLED = 5;
@@ -18,6 +19,7 @@ int osci = false;
 Adafruit_TLC5947 drvr = Adafruit_TLC5947(NUM_TLC, drvr_clock, drvr_data, drvr_lat);
 
 //	RPM CINSTRUCTUCTOR
+
 RPM_Meter rpm(&drvr, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
 
@@ -63,6 +65,7 @@ void loop()
 
 }
 
+// Nescessery dummy call
 void RPMtest() {
 	rpm.test();
 }
