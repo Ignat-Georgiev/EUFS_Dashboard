@@ -16,6 +16,12 @@ int osci = false;
 int brightness = 0;
 int brightnessLevels[4] = { 4095 / 4, 4095 / 2, 4095 / 1.25, 4095 };
 
+// Serial data bus information
+int rpmSerial = 0;
+int shiftSerial = 0;
+int gearSerial = 0;
+int warningSerial[2];
+
 // LED Driver constructor
 #define NUM_TLC 1
 #define drvr_clock 9
@@ -34,7 +40,7 @@ Button pwmChanger(11, false, false, 50);
 void setup()
 {
 
-  Serial.begin(19200);
+	Serial.begin(38400);
   pinMode(shiftLED, OUTPUT);
 
   drvr.begin();
@@ -44,10 +50,13 @@ void setup()
 	  rpm.test();
 	  dsp.init();
   }
+  drvr.clear();
 
   // TEST ARRANGEMENTS
   testButtonTimer.oscillate(shiftLED, 500, 1);
   testButtonTimer.every(100, test);
+  testButtonTimer.every(400, test2);
+  testButtonTimer.every(500, warningTest);
 
 }
 
@@ -60,12 +69,13 @@ void loop()
     rst = true;
   }
   else {
-    // reset only once to avoid problems
-    if (rst) {
-      digitalWrite(shiftLED, 0);
-      drvr.clear();
-      rst = false;
-    }
+	  // reset only once to avoid problems
+	  if (rst) {
+		  digitalWrite(shiftLED, 0);
+		  drvr.clear();
+		  rst = false;
+	  }
+  }
 
 	// PWM CHANGER
 	pwmChanger.read();
@@ -74,8 +84,46 @@ void loop()
 		if (++brightness == 4)
 			brightness = 0;
 	}
-  }
 
+	// DATA RECEIVER
+	// If data is found on serial bus.
+	if (Serial.available() > 0) {
+
+		// If initiating character is found, start placing the next characters into state integers.
+		if (Serial.peek() == 'f') {
+			Serial.read();
+			rpmSerial = Serial.parseInt();
+			Serial.read();
+			shiftSerial = Serial.parseInt();
+			Serial.read();
+			gearSerial = Serial.parseInt();
+			Serial.read();
+			warningSerial[0] = Serial.parseInt();
+			Serial.read();
+			warningSerial[1] = Serial.parseInt();
+			Serial.read();
+		}
+
+		// If more data is found. Remove it from bus.
+		while (Serial.available() > 0) { Serial.read(); }
+
+		rpm.set(rpmSerial);
+		dsp.set(gearSerial);
+		if(shiftSerial>0)
+			digitalWrite(shiftLED, 1);
+		else
+			digitalWrite(shiftLED, 0);
+		if (warningSerial[0] > 0)
+			drvr.set(oilLED, 1);
+		else
+			drvr.set(oilLED, 0);
+		if (warningSerial[1] > 0)
+			drvr.set(engineTempLED, 1);
+		else
+			drvr.set(engineTempLED, 0);
+		drvr.write();
+
+	}
 
 
 }
@@ -83,8 +131,11 @@ void loop()
 // Nescessery dummy call
 void test() {
   rpm.test();
-  dsp.test();
-  warningTest();
+  drvr.write();
+}
+void test2() {
+	dsp.test();
+	drvr.write();
 }
 
 // Warning LED test
@@ -95,8 +146,9 @@ void warningTest() {
     osci = false;
   }
   else {
-    drvr.set(oilLED, 0);
-    drvr.set(engineTempLED, 1);
+    drvr.set(oilLED, 1);
+    drvr.set(engineTempLED, 0);
     osci = true;
   }
+  drvr.write();
 }

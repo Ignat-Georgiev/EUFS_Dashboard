@@ -25,7 +25,7 @@ void RPM_Meter::set(uint16_t rpm) {
 		else
 			tlc->set(leds[i], 0);
 	}
-	tlc->write();
+//	tlc->write();
 }
 
 void RPM_Meter::test() {
