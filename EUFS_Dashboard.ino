@@ -40,7 +40,7 @@ Button pwmChanger(11, false, false, 50);
 void setup()
 {
 
-	Serial.begin(38400);
+	Serial.begin(9600);
   pinMode(shiftLED, OUTPUT);
 
   drvr.begin();
@@ -62,22 +62,22 @@ void setup()
 
 void loop()
 {
-  // TEST BUTTON ACTIONS
-  testBtn.checkButton();
-  if (testBtn.currentState == true) {
-    testButtonTimer.update();
-    rst = true;
-  }
-  else {
-	  // reset only once to avoid problems
-	  if (rst) {
-		  digitalWrite(shiftLED, 0);
-		  drvr.clear();
-		  rst = false;
-	  }
-  }
+ // // TEST BUTTON ACTIONS
+ // testBtn.checkButton();
+ // if (testBtn.currentState == true) {
+ //   testButtonTimer.update();
+ //   rst = true;
+ // }
+ // else {
+	//  // reset only once to avoid problems
+	//  if (rst) {
+	//	  digitalWrite(shiftLED, 0);
+	//	  drvr.clear();
+	//	  rst = false;
+	//  }
+ // }
 
-	// PWM CHANGER
+	//// PWM CHANGER
 	pwmChanger.read();
 	if (pwmChanger.wasReleased()) {
 		drvr.setPWM(brightnessLevels[brightness]);
@@ -107,24 +107,23 @@ void loop()
 		// If more data is found. Remove it from bus.
 		while (Serial.available() > 0) { Serial.read(); }
 
-		rpm.set(rpmSerial);
-		dsp.set(gearSerial);
-		if(shiftSerial>0)
-			digitalWrite(shiftLED, 1);
-		else
-			digitalWrite(shiftLED, 0);
-		if (warningSerial[0] > 0)
-			drvr.set(oilLED, 1);
-		else
-			drvr.set(oilLED, 0);
-		if (warningSerial[1] > 0)
-			drvr.set(engineTempLED, 1);
-		else
-			drvr.set(engineTempLED, 0);
-		drvr.write();
-
 	}
 
+	rpm.set(rpmSerial);
+	dsp.set(gearSerial);
+	if (shiftSerial>0)
+		digitalWrite(shiftLED, 1);
+	else
+		digitalWrite(shiftLED, 0);
+	if (warningSerial[0] > 0)
+		drvr.set(oilLED, 1);
+	else
+		drvr.set(oilLED, 0);
+	if (warningSerial[1] > 0)
+		drvr.set(engineTempLED, 1);
+	else
+		drvr.set(engineTempLED, 0);
+	drvr.write();
 
 }
 
