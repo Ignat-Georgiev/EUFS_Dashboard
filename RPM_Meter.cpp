@@ -1,6 +1,6 @@
 #include "RPM_Meter.h"
 
-RPM_Meter::RPM_Meter(Adafruit_TLC5947 *tlcIN, uint16_t led1, uint16_t led2, uint16_t led3, uint16_t led4, uint16_t led5, uint16_t led6, uint16_t led7
+RPM_Meter::RPM_Meter(TLC5947 *tlcIN, uint16_t led1, uint16_t led2, uint16_t led3, uint16_t led4, uint16_t led5, uint16_t led6, uint16_t led7
 	, uint16_t led8, uint16_t led9, uint16_t led10) {
 	leds = (uint16_t *)malloc(480);
 	memset(leds, 0, 480);

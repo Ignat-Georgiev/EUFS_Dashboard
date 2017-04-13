@@ -1,6 +1,6 @@
 #include "sevenSeg.h"
 
-sevenSeg::sevenSeg(Adafruit_TLC5947 *tlcIN, uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e,
+sevenSeg::sevenSeg(TLC5947 *tlcIN, uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e,
 	uint16_t f, uint16_t g, uint16_t dp) {
 	A = a;
 	B = b;

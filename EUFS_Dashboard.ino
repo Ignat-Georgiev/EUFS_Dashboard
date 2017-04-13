@@ -1,10 +1,11 @@
+#include "TLC5947.h"
 #include <Button.h>
 #include "sevenSeg.h"
 #include "RPM_Meter.h"
 #include <Event.h>
 #include <Timer.h>
 #include <ToggleButton.h>
-#include <Adafruit_TLC5947.h>
+#include "TLC5947.h"
 
 
 // pin assignments
@@ -27,7 +28,7 @@ int warningSerial[2];
 #define drvr_clock 9
 #define drvr_data 8
 #define drvr_lat 3
-Adafruit_TLC5947 drvr = Adafruit_TLC5947(NUM_TLC, drvr_clock, drvr_data, drvr_lat);
+TLC5947 drvr = TLC5947(NUM_TLC, drvr_clock, drvr_data, drvr_lat);
 
 //	CINSTRUCTUCTORS
 RPM_Meter rpm(&drvr, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);

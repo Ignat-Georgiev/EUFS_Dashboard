@@ -27,12 +27,18 @@
     <ClInclude Include="sevenSeg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TLC5947.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RPM_Meter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sevenSeg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TLC5947.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,14 +5,14 @@
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include <Arduino.h>
-	#include <Adafruit_TLC5947.h>
+	#include "TLC5947.h"
 #else
 	#include "WProgram.h"
 #endif
 
 class sevenSeg {
 public:
-	sevenSeg(Adafruit_TLC5947 *tlcIN, uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e,
+	sevenSeg(TLC5947 *tlcIN, uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e,
 		uint16_t f, uint16_t g, uint16_t dp);
 
 		void set(uint16_t dig);
@@ -20,7 +20,7 @@ public:
 		uint16_t init();
 
 private:
-	Adafruit_TLC5947 *tlc;
+	TLC5947 *tlc;
 	uint16_t prevState;
 	uint16_t prevLoop;
 	uint16_t A;
